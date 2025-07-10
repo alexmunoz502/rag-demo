@@ -20,7 +20,6 @@ docs_collection = chroma_client.get_or_create_collection(name=DOCS_COLLECTION_NA
 # ====[ Private API ]==================================================================
 def _build_prompt(context_chunks: list[str], question: str) -> str:
     context = "\n\n".join(context_chunks)
-    # TODO: make this prompt my own
     return f"""
         You are an assistant that answers questions based only on the following context.
         Try to answer the question only if it is clearly related to the provided context. If it's completely unrelated, respond with: 'Sorry, I can only answer questions related to the provided documents.'
@@ -39,7 +38,6 @@ def _embed_query(query: str) -> list[float]:
     return response.data[0].embedding
 
 
-# TODO: What is k=3?
 def _query_docs(user_question: str, k=5) -> str | None:
     query_embedding = _embed_query(user_question)
 
