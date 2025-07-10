@@ -38,20 +38,21 @@ def _embed_query(query: str) -> list[float]:
     return response.data[0].embedding
 
 
-def _query_docs(user_question: str, k=5) -> str | None:
-    query_embedding = _embed_query(user_question)
-
+def _retrieve_chunks(query_embedding: list[float], k: int) -> list[str]:
     results = docs_collection.query(query_embeddings=[query_embedding], n_results=k)
 
     if results is None or results["documents"] is None:
-        # TODO: refactor
+        # TODO: swap to logger
         print("Error: results or results documents is None")
-        return
+        return []
 
     context_chunks = results["documents"][0]
+    return context_chunks
+
+
+def _generate_response(context_chunks: list[str], user_question: str) -> str:
     prompt = _build_prompt(context_chunks, user_question)
 
-    # TODO: understand this
     completion = openai.chat.completions.create(
         model="gpt-4.1",
         messages=[
@@ -62,7 +63,17 @@ def _query_docs(user_question: str, k=5) -> str | None:
     )
 
     answer = completion.choices[0].message.content
-    return answer
+    return answer or ""
+
+
+def _query_docs(user_question: str, k=5) -> str | None:
+    query_embedding = _embed_query(user_question)
+
+    context_chunks = _retrieve_chunks(query_embedding, k)
+
+    response = _generate_response(context_chunks, user_question)
+
+    return response
 
 
 # ====[ Public API ]===================================================================

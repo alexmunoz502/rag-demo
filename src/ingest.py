@@ -32,6 +32,22 @@ def _read_documents() -> list[tuple[str, str]]:
     return docs
 
 
+def _embed_and_store(chunks: list[str], source_id: str) -> None:
+    chunk_id = 0
+    for i in tqdm(range(0, len(chunks), 20)):
+        batch = chunks[i : i + 20]
+        embeddings = _embed_texts(batch)
+        ids = [f"{source_id}-{chunk_id + j}" for j in range(len(batch))]
+        metadatas = [
+            {"source": source_id} for _ in batch
+        ]  # TODO: change this to use MetaData type?
+
+        docs_collection.add(
+            documents=batch, embeddings=embeddings, metadatas=metadatas, ids=ids
+        )
+        chunk_id += len(batch)
+
+
 def _chunk_text(
     text: str, chunk_size: int = CHUNK_SIZE, overlap: int = OVERLAP
 ) -> list:
@@ -81,22 +97,7 @@ def main() -> None:
 
 def ingest_text(text: str, source_id: str) -> None:
     chunks = _chunk_text(text)
-    # TODO: upgrade to log or something
-    print(f"Ingesting {source_id} with {len(chunks)} chunks....")
-
-    chunk_id = 0
-    for i in tqdm(range(0, len(chunks), 20)):
-        batch = chunks[i : i + 20]
-        embeddings = _embed_texts(batch)
-        ids = [f"{source_id}-{chunk_id + j}" for j in range(len(batch))]
-        metadatas = [
-            {"source": source_id} for _ in batch
-        ]  # TODO: change this to use MetaData type?
-
-        docs_collection.add(
-            documents=batch, embeddings=embeddings, metadatas=metadatas, ids=ids
-        )
-        chunk_id += len(batch)
+    _embed_and_store(chunks, source_id)
 
     print(f"Ingested {source_id}")
 
