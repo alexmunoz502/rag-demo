@@ -1,4 +1,4 @@
-from tqdm import tqdm
+from rich import progress
 
 import openai
 import chromadb
@@ -28,7 +28,7 @@ def _embed_texts(texts: list[str]) -> list:
 
 def _embed_and_store(chunks: list[str], source_id: str) -> None:
     chunk_id = 0
-    for i in tqdm(range(0, len(chunks), 20)):
+    for i in progress.track(range(0, len(chunks), 20)):
         batch = chunks[i : i + 20]
         embeddings = _embed_texts(batch)
         ids = [f"{source_id}-{chunk_id + j}" for j in range(len(batch))]

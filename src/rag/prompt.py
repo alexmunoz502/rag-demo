@@ -1,7 +1,7 @@
 # ====[ Public API ]===================================================================
 
 
-def get_system_prompt() -> str:
+def build_system_prompt() -> str:
     return """
     You are an assistant that answers questions based only on the following context.
     Try to answer the question only if it is clearly related to the provided context.

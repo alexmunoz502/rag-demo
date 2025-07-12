@@ -37,7 +37,7 @@ def _generate_response(context_chunks: list[str], user_question: str) -> str:
     completion = openai.chat.completions.create(
         model="gpt-4.1",
         messages=[
-            {"role": "system", "content": prompt.get_system_prompt()},
+            {"role": "system", "content": prompt.build_system_prompt()},
             {"role": "user", "content": user_prompt},
         ],
         temperature=0.3,
@@ -47,20 +47,14 @@ def _generate_response(context_chunks: list[str], user_question: str) -> str:
     return answer or ""
 
 
-def _query_docs(user_question: str, k=5) -> str | None:
-    query_embedding = _embed_query(user_question)
-
-    context_chunks = _retrieve_chunks(query_embedding, k)
-
-    response = _generate_response(context_chunks, user_question)
-
-    return response
-
-
 # ====[ Public API ]===================================================================
 
 
 def query_docs(query: str) -> str:
     logger.info(f"Processing query: '{query}'")
-    answer = _query_docs(query)
-    return answer or ""
+
+    query_embedding = _embed_query(query)
+    context_chunks = _retrieve_chunks(query_embedding, k=3)
+    response = _generate_response(context_chunks, query)
+
+    return response
