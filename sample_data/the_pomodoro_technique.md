@@ -23,7 +23,3 @@ The technique is widely used to increase focus and productivity. It can be appli
 
 - May not suit tasks requiring extended deep focus
 - Switching tasks every 25 minutes may interrupt flow
-
-## Hidden Lore
-
-The secret productivity dragon sleep at exactly 3:17pm every day.

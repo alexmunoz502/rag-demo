@@ -11,8 +11,8 @@
 5. Let's build a RAG
 6. Technical Highlights
 7. Live Demo
-8. The power of RAGs
-9. Applications of RAG
+8. The Power of RAGs
+9. Applications
 10. Conclusion
 
 ## 1. Introduction
@@ -132,8 +132,6 @@ By grounding LLMs with real data, we can generate responses that are accurate an
 
 In the demo, we saw how RAG can be used to talk to our documentation, but the applications of this tech are limitless.
 
-TODO: Add QR for github repo to presentation
-
 ## Q&A
 
 ### Why not just copy and paste my document into ChatGPT and give it the same prompt?
@@ -143,9 +141,4 @@ TODO: Add QR for github repo to presentation
 - Rag adds semantic filtering so GPT doesn't have to read everything
 - This breaks down when using larger documents. You can't fit the whole thing into chat, RAG addresses this by dynamically retrieving only the relevant data
 - You can't build a product off of it, breaks apart when trying to do multi-user or secure apps.
-
 - Custom GPTs can't scale to arbitrary amounts of private data. They don't do live retrieval, and you have limited control.
-
-## Sources
-
-- https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/

@@ -1,12 +1,12 @@
 import streamlit as st
-from src.ingest import ingest_text
-from src.query import query_docs
+from src.rag.ingest import ingest_text
+from src.rag.query import query_docs
 
+# ====[ Page Settings ]================================================================
 st.set_page_config(page_title="RAG Demo", page_icon="📚")
-
 st.title("📖 RAG Demo App")
 
-# === Upload & Ingest ===
+# ====[ Upload & Ingest ]==============================================================
 st.header("1. Upload Document")
 uploaded_file = st.file_uploader("Choose a .txt or .md file", type=["txt", "md"])
 
@@ -19,13 +19,16 @@ if uploaded_file:
 
     if filename not in st.session_state.ingested_files:
         text = uploaded_file.read().decode()
-        ingest_text(text=text, source_id=filename)
+        ingest_text(
+            text=text,
+            source_id=filename,
+        )
         st.session_state.ingested_files.add(filename)
         st.success(f"✅ Document '{filename}' ingested!")
     else:
-        st.info(f"📁 Document '{filename}' already ingested.")
+        st.info(f"📁 Document '{filename}' ingested.")
 
-# === Ask Question ===
+# ====[ Ask Question ]=================================================================
 st.header("2. Ask a Question")
 question = st.text_input("What do you want to know?")
 
@@ -34,6 +37,6 @@ if st.button("Ask"):
         st.warning("Please enter a question.")
     else:
         with st.spinner("Thinking..."):
-            answer = query_docs(question)  # Your existing query function
+            answer = query_docs(question)
             st.markdown("### 🧠 Answer")
             st.write(answer)

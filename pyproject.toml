@@ -5,9 +5,13 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "black>=25.1.0",
     "chromadb>=1.0.15",
     "openai>=1.93.0",
     "streamlit>=1.46.1",
     "tqdm>=4.67.1",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.12.3",
 ]
