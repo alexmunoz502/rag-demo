@@ -32,12 +32,13 @@ def _retrieve_chunks(query_embedding: list[float], k: int) -> list[str]:
 
 
 def _generate_response(context_chunks: list[str], user_question: str) -> str:
+    system_prompt = prompt.build_system_prompt()
     user_prompt = prompt.build_user_prompt(context_chunks, user_question)
 
     completion = openai.chat.completions.create(
         model="gpt-4.1",
         messages=[
-            {"role": "system", "content": prompt.build_system_prompt()},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
         ],
         temperature=0.3,
