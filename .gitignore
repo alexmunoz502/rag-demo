@@ -12,6 +12,7 @@ wheels/
 # ENV variables
 .env
 .env.*
+!.env.example
 
 # ChromaDB Persistence
 chroma_store
